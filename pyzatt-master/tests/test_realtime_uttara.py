@@ -43,9 +43,9 @@ def test_realtime(parse_options):
     z.connect_net(ip_address, machine_port)
 
     # read user ids
-    ##z.disable_device()
-    ##z.read_all_user_id()
-    ##z.enable_device()
+    z.disable_device()
+    # z.read_all_user_id()
+    z.enable_device()
 
     # enable the report of rt packets
     z.enable_realtime()
@@ -97,17 +97,17 @@ def test_realtime(parse_options):
                 print("User id: %s, verify type %i, date: %s" %
                       tuple(z.parse_event_attlog()))
                 user_data = tuple(z.parse_event_attlog())
-                mydb = mysql.connector.connect(host="door.fitnessplusbd.com",user="doorfpbd_doorfpbd",password="doorfpbd", database="doorfpbd_realtime")
+                mydb = mysql.connector.connect(host="localhost",user="root",password="Admin!@#$1234", database="realtime")
                 mycursor = mydb.cursor()
 
-                sql = "INSERT INTO uttara ( member_id, date_time, flag) VALUES ( %s, %s, %s)"
+                sql = "INSERT INTO uttara (member_id, date_time, flag) VALUES (%s, %s, %s)"
                 val = (user_data[0], user_data[2], 0)
 
 
                 try:
                     mycursor.execute(sql, val)
                     mydb.commit()
-                    
+
 
                 except mysql.connector.Error as err:
                     print(err)
@@ -117,8 +117,8 @@ def test_realtime(parse_options):
                     mycursor.close()
                     mydb.close()
                     print("Data could not be added")
-                    
-                    
+
+
                 update_sql = "UPDATE uttara set flag = '1' where id != %s"
                 print(mycursor.lastrowid)
                 try:
@@ -136,7 +136,7 @@ def test_realtime(parse_options):
                     mycursor.close()
                     mydb.close()
                     print("Data could not be added")
-                    
+
             elif ev == DEFS.EF_FINGER:
                 print("EF_FINGER: Finger placed on reader")
 
@@ -174,12 +174,12 @@ def test_realtime(parse_options):
 
     except KeyboardInterrupt:
         misc.print_info("\nExiting...")
-        
+
 
     z.disconnect()
 
 
 if __name__ == "__main__":
     print("running manual test")
-    opts = {'ip-address': "192.168.0.2"}
+    opts = {'ip-address': "103.91.229.62"}
     test_realtime(opts)

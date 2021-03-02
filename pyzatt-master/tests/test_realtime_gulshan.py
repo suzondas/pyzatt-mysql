@@ -30,9 +30,8 @@ def test_realtime(parse_options):
     assert parse_options, "Invalid run settings"
     opts = parse_options
 
-    ## ip_address = '103.91.228.56'   # set the ip address of the device to test
-    ip_address = '103.91.229.62'   # set the ip address of the device to test
     ##ip_address = '103.91.228.56'   # set the ip address of the device to test
+    ip_address = '103.91.228.56'   # Gulshan IP
     machine_port = 4370
 
     z = pyzatt.ZKSS()
@@ -98,8 +97,7 @@ def test_realtime(parse_options):
                 print("User id: %s, verify type %i, date: %s" %
                       tuple(z.parse_event_attlog()))
                 user_data = tuple(z.parse_event_attlog())
-
-                mydb = mysql.connector.connect(host="door.fitnessplusbd.com",user="doorfpbd",password="1zohW2lR61", database="doorfpbd_realtime")
+                mydb = mysql.connector.connect(host="localhost",user="root",password="Admin!@#$1234", database="realtime")
                 mycursor = mydb.cursor()
 
                 sql = "INSERT INTO gulshan (member_id, date_time, flag) VALUES (%s, %s, %s)"
@@ -137,7 +135,7 @@ def test_realtime(parse_options):
                     print("Message", err.msg)
                     mycursor.close()
                     mydb.close()
-                    print("Update could not be added")
+                    print("Data could not be added")
 
             elif ev == DEFS.EF_FINGER:
                 print("EF_FINGER: Finger placed on reader")
@@ -183,5 +181,5 @@ def test_realtime(parse_options):
 
 if __name__ == "__main__":
     print("running manual test")
-    opts = {'ip-address': "192.168.0.2"}
+    opts = {'ip-address': "103.91.228.56"}
     test_realtime(opts)
